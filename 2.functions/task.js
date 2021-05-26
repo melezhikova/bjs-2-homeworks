@@ -34,8 +34,7 @@ function worker(arr) {
 function makeWork(arrOfArr, func) {
   
   let max = func(arrOfArr[0]);
-  console.log(max);
-  
+    
   for (i = 0; i < arrOfArr.length; i++) {
     sum = func(arrOfArr[i]);       
     if (sum > max) {
