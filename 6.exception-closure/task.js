@@ -9,8 +9,8 @@ function parseCount(figure, base = 10) {
 function validateCount(figure, base = 10) {
     try {
         return parseCount(figure, base);
-    } catch {
-        return new Error ("Невалидное значение");
+    } catch (e) {
+        return e;
     }
 }
 
