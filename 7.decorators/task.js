@@ -4,18 +4,19 @@ function cachingDecoratorNew(func) {
   function wrapper(...args) {
     const hash = args.join(",");
     let idx = cache.findIndex((item) => item.hash === hash);
+    
     if (idx !== -1) {
       console.log("Из кэша: " + cache[idx].value);
       return "Из кэша: " + cache[idx].value;
-    } else {
-      let result = func(...args);
-      cache.push({hash: hash, value: result});
-      if (cache.length > 5) {
-        cache.shift();
-      } 
-      console.log("Вычисляем: " + result);
-      return "Вычисляем: " + result;
-    }
+    } 
+    
+    let result = func(...args);
+    cache.push({hash: hash, value: result});
+    if (cache.length > 5) {
+      cache.shift();
+    } 
+    console.log("Вычисляем: " + result);
+    return "Вычисляем: " + result;
   }
   
   return wrapper;
@@ -32,31 +33,23 @@ function debounceDecoratorNew(func, ms) {
     }
     clearTimeout(timeout);
     isTrottled = false;
-    timeout = setTimeout(() => {
-      func();
-     }, ms);
-
+    timeout = setTimeout(func, ms);
    };
 }
 
 function debounceDecorator2(func, ms) {
   func();
   let isTrottled = true, timeout;
+  let count = 0;
     
-  function wrapper() {
-    wrapper.history.push("функция вызвана");
-    let count = wrapper.history.length;
+  return function () {
     if (!isTrottled) {
-      return;
+    return;
     }
     clearTimeout(timeout);
     isTrottled = false;
-    timeout = setTimeout(() => {
-      func();
-     }, ms);
-     console.log(count);
+    timeout = setTimeout(func, ms);
+    count += 1;
+    console.log(count);
    };
-
-   wrapper.history = [];
-   return wrapper;
 }
